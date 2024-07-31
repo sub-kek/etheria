@@ -1,0 +1,7 @@
+etheria-api/
+etheria-server/
+paper-api-generator/
+build/
+.gradle/
+.idea/
+build-data/
