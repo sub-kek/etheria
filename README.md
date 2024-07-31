@@ -1,6 +1,6 @@
 # Etheria
 
-[![Etheria CI](https://github.com/sub-kek/Etheria/actions/workflows/inkwell.yml/badge.svg)](https://github.com/sub-kek/Etheria/actions/workflows/build.yml)
+[![Etheria CI](https://github.com/sub-kek/Etheria/actions/workflows/build.yml/badge.svg)](https://github.com/sub-kek/Etheria/actions/workflows/build.yml)
 [![Etheria Download](https://img.shields.io/github/downloads/sub-kek/Etheria/total?color=0&logo=github)](https://github.com/sub-kek/Etheria/releases/latest)
 [![Discord](https://badgen.net/discord/online-members/eRvwvmEXWz?icon=discord&label=Discord&list=what)](https://discord.gg/eRvwvmEXWz)
 
