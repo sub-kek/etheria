@@ -43,12 +43,6 @@ subprojects {
     tasks.withType<ProcessResources> {
         filteringCharset = Charsets.UTF_8.name()
     }
-
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven("https://papermc.io/repo/repository/maven-public/")
-    }
 }
 
 paperweight {
@@ -82,6 +76,11 @@ paperweight {
 }
 
 allprojects {
+    repositories {
+        mavenCentral()
+        maven(paperMavenPublicUrl)
+        maven("https://repo.bambooland.fun/maven-public/")
+    }
     publishing {
         repositories {
             maven("https://repo.bambooland.fun/maven-public/") {
@@ -90,4 +89,21 @@ allprojects {
             }
         }
     }
+}
+
+publishing {
+    if (project.hasProperty("publishDevBundle")) {
+        publications.create<MavenPublication>("devBundle") {
+            artifact(tasks.generateDevelopmentBundle) {
+                artifactId = "dev-bundle"
+            }
+        }
+    }
+}
+
+tasks.generateDevelopmentBundle {
+    apiCoordinates.set("org.subkek.etheria:etheria-api")
+    libraryRepositories.addAll(
+        "https://repo.bambooland.fun/maven-public/",
+    )
 }
