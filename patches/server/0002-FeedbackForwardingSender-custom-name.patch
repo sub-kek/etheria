@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Wed, 7 Aug 2024 06:14:49 +0300
+Subject: [PATCH] FeedbackForwardingSender custom name
+
+
+diff --git a/src/main/java/io/papermc/paper/commands/FeedbackForwardingSender.java b/src/main/java/io/papermc/paper/commands/FeedbackForwardingSender.java
+index e3a5f1ec376319bdfda87fa27ae217bff3914292..d6096881907f82dc7c86c69e9dd88fd7bbff4a74 100644
+--- a/src/main/java/io/papermc/paper/commands/FeedbackForwardingSender.java
++++ b/src/main/java/io/papermc/paper/commands/FeedbackForwardingSender.java
+@@ -23,6 +23,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
+ public final class FeedbackForwardingSender extends ServerCommandSender {
+     private final Consumer<? super Component> feedback;
+     private final CraftServer server;
++    private String name = "FeedbackForwardingSender"; // Etheria - Custom name
+ 
+     public FeedbackForwardingSender(final Consumer<? super Component> feedback, final CraftServer server) {
+         super(((ServerCommandSender) server.getConsoleSender()).perm);
+@@ -47,9 +48,15 @@ public final class FeedbackForwardingSender extends ServerCommandSender {
+         this.feedback.accept(message);
+     }
+ 
++    // Etheria start
++    public void setName(String name) {
++        this.name = name;
++    }
++    // Etheria end
++
+     @Override
+     public String getName() {
+-        return "FeedbackForwardingSender";
++        return this.name; // Etheria - Custom name
+     }
+ 
+     @Override
