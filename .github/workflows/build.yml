@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: Get repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
       - name: Get JDK 21
         uses: actions/setup-java@v3
         with:
