@@ -33,3 +33,23 @@ index e3a5f1ec376319bdfda87fa27ae217bff3914292..d6096881907f82dc7c86c69e9dd88fd7
      }
  
      @Override
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 60b10a6e1fcc06430c5cacd4c49d92e1de6e4778..657976d35f20752a63fdec7b8772e9aea4d89495 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -2377,6 +2377,15 @@ public final class CraftServer implements Server {
+     }
+     // Paper end
+ 
++    // Etheria start
++    @Override
++    public CommandSender createCommandSender(String name, final java.util.function.Consumer<? super net.kyori.adventure.text.Component> feedback) {
++        io.papermc.paper.commands.FeedbackForwardingSender sender = new io.papermc.paper.commands.FeedbackForwardingSender(feedback, this);
++        sender.setName(name);
++        return sender;
++    }
++    // Etheria end
++
+     public EntityMetadataStore getEntityMetadata() {
+         return this.entityMetadata;
+     }

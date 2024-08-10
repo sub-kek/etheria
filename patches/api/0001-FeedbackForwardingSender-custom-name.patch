@@ -1,0 +1,56 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sun, 11 Aug 2024 00:53:52 +0300
+Subject: [PATCH] FeedbackForwardingSender custom name
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 886920b33b37bdefc301f898ad0003e40eff6443..55740178ceaee0e599ce260a8cf3fc259e73609f 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -1728,6 +1728,21 @@ public final class Bukkit {
+     }
+     // Paper end
+ 
++    // Etheria start
++    /**
++     * Creates a special {@link CommandSender} which redirects command feedback (in the form of chat messages) to the
++     * specified listener. The returned sender will have the same effective permissions as {@link #getConsoleSender()}.
++     *
++     * @param name the custom name for the sender
++     * @param feedback feedback listener
++     * @return a command sender
++     */
++    @NotNull
++    public CommandSender createCommandSender(final @NotNull String name, final @NotNull java.util.function.Consumer<? super net.kyori.adventure.text.Component> feedback) {
++        return server.createCommandSender(name, feedback);
++    }
++    // Etheria end
++
+     /**
+      * Gets the folder that contains all of the various {@link World}s.
+      *
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index d6f72cb1e2380bd1a18d695c7d26ae3834f6eb52..66bd1fc8994d93909e392a8143c95b7f0c81c820 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -1477,6 +1477,19 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+     public CommandSender createCommandSender(final @NotNull java.util.function.Consumer<? super net.kyori.adventure.text.Component> feedback);
+     // Paper end
+ 
++    // Etheria start
++    /**
++     * Creates a special {@link CommandSender} which redirects command feedback (in the form of chat messages) to the
++     * specified listener. The returned sender will have the same effective permissions as {@link #getConsoleSender()}.
++     *
++     * @param name the custom name for the sender
++     * @param feedback feedback listener
++     * @return a command sender
++     */
++    @NotNull
++    public CommandSender createCommandSender(final @NotNull String name, final @NotNull java.util.function.Consumer<? super net.kyori.adventure.text.Component> feedback);
++    // Etheria end
++
+     /**
+      * Gets the folder that contains all of the various {@link World}s.
+      *
