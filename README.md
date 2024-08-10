@@ -6,9 +6,9 @@
 
 > Fork of [Folia](https://github.com/PaperMC/Folia)
 ## How to download
-Inkwell use the same paperclip jar system that Paper uses.
+Etheria use the same paperclip jar system that Paper uses.
 
-You can download the latest build of Inkwell by going [here](https://github.com/sub-kek/Etheria/releases/latest)
+You can download the latest build of Etheria by going [here](https://github.com/sub-kek/Etheria/releases/latest)
 
 You can also [build it yourself](https://github.com/sub-kek/Etheria#building).
 ## How to link plugin api

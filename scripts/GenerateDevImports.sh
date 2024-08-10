@@ -1,8 +1,8 @@
 current_dir=$(pwd)
-end_word="Inkwell"
+end_word="Etheria"
 
 if [ "${current_dir##*/}" != "$end_word" ]; then
-    echo "Run it in Inkwell root dir"
+    echo "Run it in $end_word root dir"
     exit
 fi
 

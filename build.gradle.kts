@@ -1,3 +1,5 @@
+import java.lang.Boolean.parseBoolean
+
 plugins {
     java
     `maven-publish`
@@ -92,7 +94,7 @@ allprojects {
 }
 
 publishing {
-    if (project.hasProperty("publishDevBundle")) {
+    if (parseBoolean("${properties["publishDevBundle"]}")) {
         publications.create<MavenPublication>("devBundle") {
             artifact(tasks.generateDevelopmentBundle) {
                 artifactId = "dev-bundle"
