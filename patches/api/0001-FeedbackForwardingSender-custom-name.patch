@@ -5,10 +5,10 @@ Subject: [PATCH] FeedbackForwardingSender custom name
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 886920b33b37bdefc301f898ad0003e40eff6443..55740178ceaee0e599ce260a8cf3fc259e73609f 100644
+index 63eb35aebc4551355ea1ea5cd1305d93502f0dbc..077bbf61fcf17bf1f5b43faaaf8c1514a0aa6f57 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -1728,6 +1728,21 @@ public final class Bukkit {
+@@ -1739,6 +1739,21 @@ public final class Bukkit {
      }
      // Paper end
  
@@ -31,10 +31,10 @@ index 886920b33b37bdefc301f898ad0003e40eff6443..55740178ceaee0e599ce260a8cf3fc25
       * Gets the folder that contains all of the various {@link World}s.
       *
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index d6f72cb1e2380bd1a18d695c7d26ae3834f6eb52..66bd1fc8994d93909e392a8143c95b7f0c81c820 100644
+index 8a7ba7d14f20b8169854daaf26e8f4da4563f166..297ebec37df0b5049834bf7376854c2059e77ad7 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1477,6 +1477,19 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -1488,6 +1488,19 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      public CommandSender createCommandSender(final @NotNull java.util.function.Consumer<? super net.kyori.adventure.text.Component> feedback);
      // Paper end
  
