@@ -4,7 +4,7 @@
 [![Etheria Download](https://img.shields.io/github/downloads/sub-kek/Etheria/total?color=0&logo=github)](https://github.com/sub-kek/Etheria/releases/latest)
 [![Discord](https://badgen.net/discord/online-members/eRvwvmEXWz?icon=discord&label=Discord&list=what)](https://discord.gg/eRvwvmEXWz)
 
-> Fork of [Folia](https://github.com/PaperMC/Folia)
+> Fork of [Pufferfish](https://github.com/pufferfish-gg/Pufferfish)
 ## How to download
 Etheria use the same paperclip jar system that Paper uses.
 

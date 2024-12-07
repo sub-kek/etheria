@@ -1,9 +1,10 @@
 import java.lang.Boolean.parseBoolean
 
 plugins {
-    java
-    `maven-publish`
-    id("io.papermc.paperweight.patcher") version "1.7.1"
+    id("java")
+    id("maven-publish")
+    id("com.gradleup.shadow") version("9.0.0-beta4")
+    id("io.papermc.paperweight.patcher") version("1.7.7")
 }
 
 allprojects {
@@ -29,9 +30,9 @@ repositories {
 }
 
 dependencies {
-    remapper("net.fabricmc:tiny-remapper:0.10.3:fat")
+    remapper("net.fabricmc:tiny-remapper:0.10.4:fat")
     decompiler("org.vineflower:vineflower:1.10.1")
-    paperclip("io.papermc:paperclip:3.0.3")
+    paperclip("io.papermc:paperclip:3.0.4-SNAPSHOT")
 }
 
 subprojects {
@@ -53,13 +54,13 @@ paperweight {
     remapRepo.set("https://maven.fabricmc.net/")
     decompileRepo.set("https://files.minecraftforge.net/maven/")
 
-    useStandardUpstream("Folia") {
-        url.set(github("PaperMC", "Folia"))
-        ref.set(providers.gradleProperty("foliaRef"))
+    useStandardUpstream("Pufferfish") {
+        url.set(github("pufferfish-gg", "Pufferfish"))
+        ref.set(providers.gradleProperty("pufferfishRef"))
 
         withStandardPatcher {
-            apiSourceDirPath.set("Folia-API")
-            serverSourceDirPath.set("Folia-Server")
+            apiSourceDirPath.set("pufferfish-api")
+            serverSourceDirPath.set("pufferfish-server")
 
             apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
             serverPatchDir.set(layout.projectDirectory.dir("patches/server"))
@@ -105,7 +106,5 @@ publishing {
 
 tasks.generateDevelopmentBundle {
     apiCoordinates.set("org.subkek.etheria:etheria-api")
-    libraryRepositories.addAll(
-        "https://repo.bambooland.fun/maven-public/",
-    )
+    libraryRepositories.addAll("https://repo.bambooland.fun/maven-public/")
 }
