@@ -6,4 +6,4 @@ pluginManagement {
 }
 
 rootProject.name = "etheria"
-include("etheria-api", "etheria-server", "paper-api-generator")
+include("etheria-api", "etheria-server")

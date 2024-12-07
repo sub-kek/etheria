@@ -3,19 +3,8 @@ import java.lang.Boolean.parseBoolean
 plugins {
     id("java")
     id("maven-publish")
-    id("com.gradleup.shadow") version("9.0.0-beta4")
+    id("com.gradleup.shadow") version("9.0.0-beta4") apply(false)
     id("io.papermc.paperweight.patcher") version("1.7.7")
-}
-
-allprojects {
-    apply(plugin = "java")
-    apply(plugin = "maven-publish")
-
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
-        }
-    }
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -36,25 +25,48 @@ dependencies {
 }
 
 subprojects {
-    tasks.withType<JavaCompile> {
+    apply(plugin = "java")
+    apply(plugin = "maven-publish")
+
+    java {
+        toolchain { languageVersion.set(JavaLanguageVersion.of(21)) }
+    }
+
+    tasks.withType<JavaCompile>().configureEach {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(21)
     }
-    tasks.withType<Javadoc> {
-        options.encoding = Charsets.UTF_8.name()
+
+    repositories {
+        mavenCentral()
+        maven(paperMavenPublicUrl)
+        maven("https://jitpack.io") {
+            content {
+                includeModule("me.carleslc.Simple-YAML", "Simple-Yaml")
+                includeModule("me.carleslc.Simple-YAML", "Simple-Configuration")
+                includeModule("me.carleslc.Simple-YAML", "Simple-YAML-Parent")
+                includeModule("com.github.technove", "Flare")
+            }
+        }
     }
-    tasks.withType<ProcessResources> {
-        filteringCharset = Charsets.UTF_8.name()
+
+    publishing {
+        repositories {
+            maven("https://repo.bambooland.fun/maven-public/") {
+                name = "subkek"
+                credentials(PasswordCredentials::class)
+            }
+        }
     }
 }
 
 paperweight {
     serverProject.set(project(":etheria-server"))
 
-    remapRepo.set("https://maven.fabricmc.net/")
-    decompileRepo.set("https://files.minecraftforge.net/maven/")
+    useStandardUpstream("pufferfish") {
+        remapRepo.set("https://maven.fabricmc.net/")
+        decompileRepo.set("https://files.minecraftforge.net/maven/")
 
-    useStandardUpstream("Pufferfish") {
         url.set(github("pufferfish-gg", "Pufferfish"))
         ref.set(providers.gradleProperty("pufferfishRef"))
 
@@ -74,22 +86,6 @@ paperweight {
             upstreamDirPath = "paper-api-generator/generated"
             patchDir = layout.projectDirectory.dir("patches/generated-api")
             outputDir = layout.projectDirectory.dir("paper-api-generator/generated")
-        }
-    }
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-        maven(paperMavenPublicUrl)
-        maven("https://repo.bambooland.fun/maven-public/")
-    }
-    publishing {
-        repositories {
-            maven("https://repo.bambooland.fun/maven-public/") {
-                name = "subkek"
-                credentials(PasswordCredentials::class)
-            }
         }
     }
 }
