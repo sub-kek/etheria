@@ -26,6 +26,7 @@ java {
   toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 ```
+
 ### maven
 ```xml
 <repository>
