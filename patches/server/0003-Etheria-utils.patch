@@ -34,10 +34,10 @@ index d62f7375394409a278bc565c8263506c598ceeba..adaf480bfd5a168abfc3c9ba0fe40187
          this.setFlightAllowed(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/org/subkek/etheria/EtheriaConfig.java b/src/main/java/org/subkek/etheria/EtheriaConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f529c8b456753a87746fa6dd461bcf440c28fe96
+index 0000000000000000000000000000000000000000..9a5f2036c9c9ca31dac335cd0facd4cc5b1d277b
 --- /dev/null
 +++ b/src/main/java/org/subkek/etheria/EtheriaConfig.java
-@@ -0,0 +1,139 @@
+@@ -0,0 +1,138 @@
 +package org.subkek.etheria;
 +
 +import lombok.AccessLevel;
@@ -87,7 +87,7 @@ index 0000000000000000000000000000000000000000..f529c8b456753a87746fa6dd461bcf44
 +                try {
 +                    method.invoke(this);
 +                } catch (Throwable e) {
-+                    EtheriaLogger.error("Failed to load configuration option from {0}", e, method.getName());
++                    EtheriaLogger.error("Failed to load configuration option from {}", e, method.getName());
 +                }
 +            }
 +        }
@@ -154,10 +154,10 @@ index 0000000000000000000000000000000000000000..f529c8b456753a87746fa6dd461bcf44
 +    private void removeValue(String key) {
 +        if (yaml.contains(key)) {
 +            yaml.remove(key);
-+            migrateLog("Successfully removed value {0}", key);
++            migrateLog("Successfully removed value {}", key);
 +            return;
 +        }
-+        migrateLog("Not found value {0} to remove", key);
++        migrateLog("Not found value {} to remove", key);
 +    }
 +
 +    private void migrateValue(String key, String newKey) {
@@ -165,24 +165,23 @@ index 0000000000000000000000000000000000000000..f529c8b456753a87746fa6dd461bcf44
 +            Object value = yaml.get(key);
 +            yaml.remove(key);
 +            yaml.set(newKey, value);
-+            migrateLog("Successfully migrated value {0} to {1}", key, newKey);
++            migrateLog("Successfully migrated value {} to {}", key, newKey);
 +            return;
 +        }
-+        migrateLog("Not found value {0} to migrate to {1}", key, newKey);
++        migrateLog("Not found value {} to migrate to {}", key, newKey);
 +    }
 +
-+    //  private boolean option = false // current value is default // Must be accessed with getOption()
-+    //
-+    //  private void someSettings() { // Configurator methods must be ends with Settings
-+    //    option = getBoolean("some.option", option, "Good comment")
++    //  private boolean option = false; # current value is default // Must be accessed with getOption()
++    //  private void someSettings() { # Configurator methods must be ends with Settings
++    //    option = getBoolean("some.option", option, "Good comment");
 +    //  }
 +}
 diff --git a/src/main/java/org/subkek/etheria/EtheriaLogger.java b/src/main/java/org/subkek/etheria/EtheriaLogger.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..ad3153566698b1f5f483a8e1c5ef9de2e62ef12d
+index 0000000000000000000000000000000000000000..33c0771f24a3054d334a57dd841897de12521af3
 --- /dev/null
 +++ b/src/main/java/org/subkek/etheria/EtheriaLogger.java
-@@ -0,0 +1,38 @@
+@@ -0,0 +1,53 @@
 +package org.subkek.etheria;
 +
 +import org.bukkit.Bukkit;
@@ -201,12 +200,27 @@ index 0000000000000000000000000000000000000000..ad3153566698b1f5f483a8e1c5ef9de2
 +        this.logger = new LoggerImpl();
 +    }
 +
++    private static String format(String str, Object... replace) {
++        for (int i = 0; i <= replace.length - 1; i++) {
++            str = str.replaceFirst("\\{}", replace[i].toString());
++        }
++        return str;
++    }
++
 +    public static void info(@NotNull String message, Object... format) {
-+        INSTANCE.logger.log(Level.INFO, Formatter.format(message, format));
++        INSTANCE.logger.log(Level.INFO, format(message, format));
++    }
++
++    public static void warn(@NotNull String message, @Nullable Throwable e, Object... format) {
++        INSTANCE.logger.log(Level.WARNING, format(message, format), e);
++    }
++
++    public static void warn(@NotNull String message, Object... format) {
++        warn(message, null, format);
 +    }
 +
 +    public static void error(@NotNull String message, @Nullable Throwable e, Object... format) {
-+        INSTANCE.logger.log(Level.SEVERE, Formatter.format(message, format), e);
++        INSTANCE.logger.log(Level.SEVERE, format(message, format), e);
 +    }
 +
 +    public static void error(@NotNull String message, Object... format) {
