@@ -5,39 +5,38 @@ Subject: [PATCH] Stonecutter damage
 
 
 diff --git a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
-index 99a7e9eb75231c15bd8bb24fbb4e296bc9fdedff..8d9ec1bc8518585214870db7750a3747962c5f6d 100644
+index 99a7e9eb75231c15bd8bb24fbb4e296bc9fdedff..e82a76f52fbcdd0ad9c4a7532cec6047eefc9d2f 100644
 --- a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
 +++ b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
-@@ -97,6 +97,8 @@ public class CombatTracker {
+@@ -97,9 +97,13 @@ public class CombatTracker {
                  String string = "death.attack." + damageSource.getMsgId();
                  Component component = ComponentUtils.wrapInSquareBrackets(Component.translatable(string + ".link")).withStyle(INTENTIONAL_GAME_DESIGN_STYLE);
                  return Component.translatable(string + ".message", this.mob.getDisplayName(), component);
+-            } else {
+-                return damageSource.getLocalizedDeathMessage(this.mob);
++            // Etheria start
 +            } else if (damageSource.isStonecutter()) {
 +                return damageSource.getLocalizedDeathMessage(org.subkek.etheria.EtheriaConfig.INSTANCE.getStonecutterDeathMsg(), this.mob);
-             } else {
-                 return damageSource.getLocalizedDeathMessage(this.mob);
              }
-diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-index bb1a60180e58c1333e7bb33e8acf1b0225eda8a8..b03695b0704ac73697928bab1415fd1da7a38a61 100644
---- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-+++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-@@ -198,6 +198,15 @@ public class DamageSource {
++            // Etheria start
++
++            return damageSource.getLocalizedDeathMessage(this.mob); // Etheria
          }
      }
  
-+    // Etheria start
-+    public Component getLocalizedDeathMessage(String str, LivingEntity entity) {
-+        net.kyori.adventure.text.Component name = io.papermc.paper.adventure.PaperAdventure.asAdventure(entity.getDisplayName());
-+        net.kyori.adventure.text.minimessage.tag.resolver.TagResolver template = net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component("player", name);
-+        net.kyori.adventure.text.Component component = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(str, template);
-+        return io.papermc.paper.adventure.PaperAdventure.asVanilla(component);
-+    }
-+    // Etheria end
-+
-     public String getMsgId() {
-         return this.type().msgId();
+diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
+index 625074245ab8abff67f9a7338869fb46f080affa..300baad114626751f9672366cb38bfeae594eeb6 100644
+--- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
++++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
+@@ -117,6 +117,7 @@ public class DamageSource {
+         damageSource.sweep = this.isSweep();
+         damageSource.poison = this.isPoison();
+         damageSource.melting = this.isMelting();
++        damageSource.stonecutter = this.isStonecutter(); // Etheria
+         return damageSource;
      }
-@@ -276,4 +285,18 @@ public class DamageSource {
+     // CraftBukkit end
+@@ -285,4 +286,18 @@ public class DamageSource {
          return this;
      }
      // Paper end - add critical damage API
@@ -51,16 +50,16 @@ index bb1a60180e58c1333e7bb33e8acf1b0225eda8a8..b03695b0704ac73697928bab1415fd1d
 +    }
 +
 +    public DamageSource stonecutter(boolean stonecutter) {
-+        this.stonecutter = stonecutter;
++        this.stonecutter = true;
 +        return this;
 +    }
 +    // Etheria end
  }
 diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSources.java b/src/main/java/net/minecraft/world/damagesource/DamageSources.java
-index be87cb3cfa15a7d889118cdc4b87232e30749023..74a203e5691a34181e228caf33dfafb8bea2b9bc 100644
+index be87cb3cfa15a7d889118cdc4b87232e30749023..6d4636623aed4e6cf4d6e512f6812da39ba7b189 100644
 --- a/src/main/java/net/minecraft/world/damagesource/DamageSources.java
 +++ b/src/main/java/net/minecraft/world/damagesource/DamageSources.java
-@@ -46,6 +46,7 @@ public class DamageSources {
+@@ -46,11 +46,13 @@ public class DamageSources {
      // CraftBukkit start
      private final DamageSource melting;
      private final DamageSource poison;
@@ -68,14 +67,12 @@ index be87cb3cfa15a7d889118cdc4b87232e30749023..74a203e5691a34181e228caf33dfafb8
  
      public DamageSources(RegistryAccess registryManager) {
          this.damageTypes = registryManager.lookupOrThrow(Registries.DAMAGE_TYPE);
-@@ -77,6 +78,7 @@ public class DamageSources {
-         this.stalagmite = this.source(DamageTypes.STALAGMITE);
-         this.outsideBorder = this.source(DamageTypes.OUTSIDE_BORDER);
-         this.genericKill = this.source(DamageTypes.GENERIC_KILL);
-+        this.stonecutter = this.source(DamageTypes.STONECUTTER).stonecutter(); // Etheria
-     }
- 
-     private DamageSource source(ResourceKey<DamageType> key) {
+         this.melting = this.source(DamageTypes.ON_FIRE).melting();
+         this.poison = this.source(DamageTypes.MAGIC).poison();
++        this.stonecutter = this.source(DamageTypes.MAGIC).stonecutter();
+         // CraftBukkit end
+         this.inFire = this.source(DamageTypes.IN_FIRE);
+         this.campfire = this.source(DamageTypes.CAMPFIRE);
 @@ -298,4 +300,10 @@ public class DamageSources {
      public DamageSource mace(Entity attacker) {
          return this.source(DamageTypes.MACE_SMASH, attacker);
@@ -87,71 +84,35 @@ index be87cb3cfa15a7d889118cdc4b87232e30749023..74a203e5691a34181e228caf33dfafb8
 +    }
 +    // Etheria end
  }
-diff --git a/src/main/java/net/minecraft/world/damagesource/DamageTypes.java b/src/main/java/net/minecraft/world/damagesource/DamageTypes.java
-index 4db379a7a40808a5c5a881dde72b86de1326cccb..72869ba847d156c8270d80888c99e40790dbc70f 100644
---- a/src/main/java/net/minecraft/world/damagesource/DamageTypes.java
-+++ b/src/main/java/net/minecraft/world/damagesource/DamageTypes.java
-@@ -55,6 +55,7 @@ public interface DamageTypes {
-     ResourceKey<DamageType> OUTSIDE_BORDER = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.withDefaultNamespace("outside_border"));
-     ResourceKey<DamageType> GENERIC_KILL = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.withDefaultNamespace("generic_kill"));
-     ResourceKey<DamageType> MACE_SMASH = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.withDefaultNamespace("mace_smash"));
-+    ResourceKey<DamageType> STONECUTTER = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.withDefaultNamespace("stonecutter"));
- 
-     static void bootstrap(BootstrapContext<DamageType> damageTypeRegisterable) {
-         damageTypeRegisterable.register(IN_FIRE, new DamageType("inFire", 0.1F, DamageEffects.BURNING));
-@@ -112,5 +113,6 @@ public interface DamageTypes {
-         damageTypeRegisterable.register(GENERIC_KILL, new DamageType("genericKill", 0.0F));
-         damageTypeRegisterable.register(WIND_CHARGE, new DamageType("mob", 0.1F));
-         damageTypeRegisterable.register(MACE_SMASH, new DamageType("mace_smash", 0.1F));
-+        damageTypeRegisterable.register(STONECUTTER, new DamageType("stonecutter", 0.0F));
-     }
- }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 0a0d004699eeaae12852b197b32a449a86de3028..10f6430f19be9a9e32c00f9a4de82a828a2bf605 100644
+index 0a0d004699eeaae12852b197b32a449a86de3028..49220bad6cf359f63576c590b7410e53e2a0e42c 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -4677,6 +4677,13 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -4677,7 +4677,6 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
  
      // CraftBukkit start
      private final CommandSource commandSource = new CommandSource() {
-+        // Etheria Start
-+        public void sendMessage(@Nullable net.kyori.adventure.text.Component message) {
-+            if (message != null) {
-+                this.sendSystemMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message));
-+            }
-+        }
-+        // Etheria end
- 
+-
          @Override
          public void sendSystemMessage(Component message) {
+         }
 diff --git a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
-index e61644241f24b42bb4f702d3eef5b590b4d107c8..8bd953c7de30b8d186a1ddb85f6cce8709ec86a6 100644
+index e61644241f24b42bb4f702d3eef5b590b4d107c8..9744eb75daf434ee15704b21bec82850cae29003 100644
 --- a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
-@@ -98,4 +98,26 @@ public class StonecutterBlock extends Block {
+@@ -98,4 +98,15 @@ public class StonecutterBlock extends Block {
      protected boolean isPathfindable(BlockState state, PathComputationType type) {
          return false;
      }
 +
 +    // Etheria start
 +    @Override
-+    public void stepOn(Level world, BlockPos pos, BlockState state, net.minecraft.world.entity.Entity entity) {
++    public void stepOn(Level level, BlockPos pos, BlockState state, net.minecraft.world.entity.Entity entity) {
 +        float damage = org.subkek.etheria.EtheriaConfig.INSTANCE.getStonecutterDamage();
 +        if (damage > 0f && entity instanceof net.minecraft.world.entity.LivingEntity) {
-+            if (world instanceof net.minecraft.server.level.ServerLevel serverWorld) {
-+                entity.hurtServer(serverWorld, entity.damageSources().stonecutter().directBlock(world, pos), damage);
-+            } else {
-+                // Получить StackTrace из массива.
-+                // #TODO Переместить в EtheriaUtils
-+                StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-+                String stackTrace = java.util.Arrays.stream(stackTraceElements)
-+                    .map(StackTraceElement::toString)
-+                    .collect(java.util.stream.Collectors.joining(System.lineSeparator()));
-+
-+                org.subkek.etheria.EtheriaLogger.warn("Level is not instead of ServerLevel: {}", stackTrace);
-+            }
++            entity.hurtServer((net.minecraft.server.level.ServerLevel) level, entity.damageSources().stonecutter().directBlock(level, pos), damage);
 +        }
-+        super.stepOn(world, pos, state, entity);
++        super.stepOn(level, pos, state, entity);
 +    }
 +    // Etheria end
  }
@@ -168,6 +129,19 @@ index c84fd369d92932903c76bb2012602617d3e2d213..6acfd6b2ca7304217161a51b7cfcefe9
              return PathType.DAMAGE_OTHER;
          } else if (blockState.is(Blocks.HONEY_BLOCK)) {
              return PathType.STICKY_HONEY;
+diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+index e37aaf77f94b97b736cc20ef070cefdff0400188..5695e1da36aa5a290d4daae49d24449624a6889a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+@@ -1131,7 +1131,7 @@ public class CraftEventFactory {
+             return CraftEventFactory.callEntityDamageEvent(source.getDirectBlock(), source.getDirectBlockState(), entity, DamageCause.LAVA, bukkitDamageSource, modifiers, modifierFunctions, cancelled);
+         } else if (source.getDirectBlock() != null) {
+             DamageCause cause;
+-            if (source.is(DamageTypes.CACTUS) || source.is(DamageTypes.SWEET_BERRY_BUSH) || source.is(DamageTypes.STALAGMITE) || source.is(DamageTypes.FALLING_STALACTITE) || source.is(DamageTypes.FALLING_ANVIL)) {
++            if (source.is(DamageTypes.CACTUS) || source.is(DamageTypes.SWEET_BERRY_BUSH) || source.is(DamageTypes.STALAGMITE) || source.is(DamageTypes.FALLING_STALACTITE) || source.is(DamageTypes.FALLING_ANVIL) || source.isStonecutter()) { // Etheria
+                 cause = DamageCause.CONTACT;
+             } else if (source.is(DamageTypes.HOT_FLOOR)) {
+                 cause = DamageCause.HOT_FLOOR;
 diff --git a/src/main/java/org/subkek/etheria/EtheriaConfig.java b/src/main/java/org/subkek/etheria/EtheriaConfig.java
 index 9a5f2036c9c9ca31dac335cd0facd4cc5b1d277b..60506e1815f55b7c2e38920d78c12e7d3d4abb9a 100644
 --- a/src/main/java/org/subkek/etheria/EtheriaConfig.java

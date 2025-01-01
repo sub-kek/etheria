@@ -1,0 +1,103 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Wed, 1 Jan 2025 19:22:55 +0300
+Subject: [PATCH] Component related conveniences
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 5a8f396d47577f087abb415c972fd4f51e50faba..ea586a257d69666e4bd2091684ef533f29864150 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -2252,6 +2252,26 @@ public class ServerPlayer extends net.minecraft.world.entity.player.Player imple
+         this.lastSentExp = -1; // CraftBukkit - Added to reset
+     }
+ 
++    // Etheria start - Component related conveniences
++    public void sendActionBarMessage(@Nullable Component message) {
++        if (message != null) {
++            displayClientMessage(message, true);
++        }
++    }
++
++    public void sendActionBarMessage(@Nullable net.kyori.adventure.text.Component message) {
++        if (message != null) {
++            sendActionBarMessage(PaperAdventure.asVanilla(message));
++        }
++    }
++
++    public void sendActionBarMessage(@Nullable String message) {
++        if (message != null && !message.isEmpty()) {
++            sendActionBarMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message));
++        }
++    }
++    // Etheria end - Component related conveniences
++
+     @Override
+     public void displayClientMessage(Component message, boolean overlay) {
+         this.sendSystemMessage(message, overlay);
+@@ -2476,6 +2496,20 @@ public class ServerPlayer extends net.minecraft.world.entity.player.Player imple
+         return new CommandSourceStack(this.commandSource(), this.position(), this.getRotationVector(), this.serverLevel(), this.getPermissionLevel(), this.getName().getString(), this.getDisplayName(), this.server, this);
+     }
+ 
++    // Etheria start - Component related conveniences
++    public void sendMessage(@Nullable net.kyori.adventure.text.Component message) {
++        if (message != null) {
++            this.sendSystemMessage(PaperAdventure.asVanilla(message));
++        }
++    }
++
++    public void sendMiniMessage(@Nullable String message) {
++        if (message != null && !message.isEmpty()) {
++            this.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message));
++        }
++    }
++    // Etheria end - Component related conveniences
++
+     public void sendSystemMessage(Component message) {
+         this.sendSystemMessage(message, false);
+     }
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index 1a956249828156fdc273888de59128c3d1a0b898..c83067033177b2c99f52a46e88fdbc9ea70127a4 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -991,6 +991,20 @@ public abstract class PlayerList {
+     }
+     // CraftBukkit end
+ 
++    // Etheria start - Component related conveniences
++    public void broadcastMessage(@Nullable net.kyori.adventure.text.Component message, boolean overlay) {
++        if (message != null) {
++            this.broadcastSystemMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message), overlay);
++        }
++    }
++
++    public void broadcastMiniMessage(@Nullable String message, boolean overlay) {
++        if (message != null && !message.isEmpty()) {
++            this.broadcastMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message), overlay);
++        }
++    }
++    // Etheria end - Component related conveniences
++
+     public void broadcastAll(Packet<?> packet, ResourceKey<Level> dimension) {
+         Iterator iterator = this.players.iterator();
+ 
+diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
+index bb1a60180e58c1333e7bb33e8acf1b0225eda8a8..625074245ab8abff67f9a7338869fb46f080affa 100644
+--- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
++++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
+@@ -198,6 +198,15 @@ public class DamageSource {
+         }
+     }
+ 
++    // Etheria start - Component related conveniences
++    public Component getLocalizedDeathMessage(String str, LivingEntity entity) {
++        net.kyori.adventure.text.Component name = io.papermc.paper.adventure.PaperAdventure.asAdventure(entity.getDisplayName());
++        net.kyori.adventure.text.minimessage.tag.resolver.TagResolver template = net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component("player", name);
++        net.kyori.adventure.text.Component component = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(str, template);
++        return io.papermc.paper.adventure.PaperAdventure.asVanilla(component);
++    }
++    // Etheria end - Component related conveniences
++
+     public String getMsgId() {
+         return this.type().msgId();
+     }
