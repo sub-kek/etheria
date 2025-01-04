@@ -85,10 +85,10 @@ index be87cb3cfa15a7d889118cdc4b87232e30749023..6d4636623aed4e6cf4d6e512f6812da3
 +    // Etheria end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 0a0d004699eeaae12852b197b32a449a86de3028..49220bad6cf359f63576c590b7410e53e2a0e42c 100644
+index c156b2197d02d4b2b96f3b918f1c5f817b4fc086..040797bfe9c861c3333afaf876b49838761fb26f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -4677,7 +4677,6 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -4707,7 +4707,6 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
  
      // CraftBukkit start
      private final CommandSource commandSource = new CommandSource() {
@@ -97,10 +97,10 @@ index 0a0d004699eeaae12852b197b32a449a86de3028..49220bad6cf359f63576c590b7410e53
          public void sendSystemMessage(Component message) {
          }
 diff --git a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
-index e61644241f24b42bb4f702d3eef5b590b4d107c8..9744eb75daf434ee15704b21bec82850cae29003 100644
+index f1366aea49206afcd64bf058ee673d6a562315c5..f3654a79ea53d3e33e47f3dc9afeb7f9be63655f 100644
 --- a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
-@@ -98,4 +98,15 @@ public class StonecutterBlock extends Block {
+@@ -93,4 +93,15 @@ public class StonecutterBlock extends Block {
      protected boolean isPathfindable(BlockState state, PathComputationType type) {
          return false;
      }

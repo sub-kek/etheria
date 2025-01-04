@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-  compileOnly("org.subkek.etheria:etheria-api:1.21-R0.1-SNAPSHOT")
+  compileOnly("org.subkek.etheria:etheria-api:1.21.4-R0.1-SNAPSHOT")
 }
 
 java {
@@ -38,7 +38,7 @@ java {
 <dependency>
   <groupId>org.subkek.etheria</groupId>
   <artifactId>etheria-api</artifactId>
-  <version>1.21.3-R0.1-SNAPSHOT</version>
+  <version>1.21.4-R0.1-SNAPSHOT</version>
   <scope>provided</scope>
 </dependency>
  ```

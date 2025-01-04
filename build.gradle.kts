@@ -40,17 +40,12 @@ subprojects {
 paperweight {
   serverProject.set(project(":etheria-server"))
 
-  useStandardUpstream("pufferfish") {
-    remapRepo.set("https://maven.fabricmc.net/")
-    decompileRepo.set("https://files.minecraftforge.net/maven/")
+  usePaperUpstream(providers.gradleProperty("paperRef")) {
 
-    url.set(github("pufferfish-gg", "Pufferfish"))
-    ref.set(providers.gradleProperty("pufferfishRef"))
+    remapRepo.set(paperMavenPublicUrl)
+    decompileRepo.set(paperMavenPublicUrl)
 
-    withStandardPatcher {
-      apiSourceDirPath.set("pufferfish-api")
-      serverSourceDirPath.set("pufferfish-server")
-
+    withPaperPatcher {
       apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
       serverPatchDir.set(layout.projectDirectory.dir("patches/server"))
 

@@ -5,10 +5,10 @@ Subject: [PATCH] Etheria utils
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index b95de063b91980890de5008d9e230dd4e7e5d884..a23b058291ca9dd3357e0a47d91480309f6eb19c 100644
+index 7baa714a7ab815f71b0f609f34f258370a267640..b758cbd1692f4abcdec12a91e026c850d3e8bdf2 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -88,6 +88,11 @@ dependencies {
+@@ -89,6 +89,11 @@ dependencies {
      implementation("me.lucko:spark-api:0.1-20240720.200737-2")
      implementation("me.lucko:spark-paper:1.10.119-SNAPSHOT")
      // Paper end - spark

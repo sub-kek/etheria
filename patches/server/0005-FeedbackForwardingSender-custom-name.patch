@@ -34,7 +34,7 @@ index e3a5f1ec376319bdfda87fa27ae217bff3914292..d6096881907f82dc7c86c69e9dd88fd7
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index ac8af406180bc680d46e8edc3da0fc2e5211345a..acbf3fea654209b59013b3ca6bb9f94434468d5e 100644
+index 97b5d6ba2b19a7c730730c74175a29157aed1840..52bfa4c8a0812354d9c4aaeaf0d388d17feffdad 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -2350,6 +2350,15 @@ public final class CraftServer implements Server {
