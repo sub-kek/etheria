@@ -97,6 +97,14 @@ publishing {
       }
     }
   }
+
+  if (parseBoolean("${properties["publishPaperclipReobf"]}")) {
+    publications.create<MavenPublication>("paperclipReobf") {
+      artifact(tasks.createReobfPaperclipJar) {
+        artifactId = "paperclip-reobf"
+      }
+    }
+  }
 }
 
 tasks.generateDevelopmentBundle {
