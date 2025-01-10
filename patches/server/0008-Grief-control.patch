@@ -1,0 +1,69 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Fri, 10 Jan 2025 18:09:56 +0300
+Subject: [PATCH] Grief control
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
+index d5fc74dbc2c5f6b65fee46e7797b151144c8fd41..e6fad4fce1b481047949a622ac645bf87a55bd40 100644
+--- a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
++++ b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
+@@ -504,6 +504,7 @@ public class EnderDragon extends Mob implements Enemy {
+         // CraftBukkit end
+ 
+         for (int k1 = i; k1 <= l; ++k1) {
++            if (!org.subkek.etheria.EtheriaConfig.INSTANCE.isEnderdragonAllowGrief()) break; // Etheria - Grief control
+             for (int l1 = j; l1 <= i1; ++l1) {
+                 for (int i2 = k; i2 <= j1; ++i2) {
+                     BlockPos blockposition = new BlockPos(k1, l1, i2);
+diff --git a/src/main/java/net/minecraft/world/entity/monster/Creeper.java b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
+index 1906dfc22af208d6e801ad4a8f2f9e9702432691..ff2e09ed57bf5650786f367e71549b4207a1c07e 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/Creeper.java
++++ b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
+@@ -271,7 +271,7 @@ public class Creeper extends Monster {
+             if (!event.isCancelled()) {
+             // CraftBukkit end
+             this.dead = true;
+-            worldserver.explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), Level.ExplosionInteraction.MOB); // CraftBukkit // Paper - fix DamageSource API (revert to vanilla, no, just no, don't change this)
++            worldserver.explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), org.subkek.etheria.EtheriaConfig.INSTANCE.isCreeperAllowGrief() ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE); // CraftBukkit // Paper - fix DamageSource API (revert to vanilla, no, just no, don't change this) // Etheria - Grief control
+             this.spawnLingeringCloud();
+             this.triggerOnDeathMobEffects(worldserver, Entity.RemovalReason.KILLED);
+             this.discard(EntityRemoveEvent.Cause.EXPLODE); // CraftBukkit - add Bukkit remove cause
+diff --git a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
+index 4e4dab5bc202f6f421dcff98f0e36e8e70378b49..dccc133364801f66ecd3ee9262aa1c5d0936fc74 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
++++ b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
+@@ -493,6 +493,7 @@ public class EnderMan extends Monster implements NeutralMob {
+ 
+         @Override
+         public boolean canUse() {
++            if (!org.subkek.etheria.EtheriaConfig.INSTANCE.isEndermanAllowGrief()) return false; // Etheria - Grief control
+             return this.enderman.getCarriedBlock() == null ? false : (!getServerLevel((Entity) this.enderman).getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? false : this.enderman.getRandom().nextInt(reducedTickDelay(2000)) == 0);
+         }
+ 
+@@ -538,6 +539,7 @@ public class EnderMan extends Monster implements NeutralMob {
+ 
+         @Override
+         public boolean canUse() {
++            if (!org.subkek.etheria.EtheriaConfig.INSTANCE.isEndermanAllowGrief()) return false; // Etheria - Grief control
+             return this.enderman.getCarriedBlock() != null ? false : (!getServerLevel((Entity) this.enderman).getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? false : this.enderman.getRandom().nextInt(reducedTickDelay(20)) == 0);
+         }
+ 
+diff --git a/src/main/java/org/subkek/etheria/EtheriaConfig.java b/src/main/java/org/subkek/etheria/EtheriaConfig.java
+index 60506e1815f55b7c2e38920d78c12e7d3d4abb9a..94b207c7caf07faca69bbc119c70267ee4f36b7c 100644
+--- a/src/main/java/org/subkek/etheria/EtheriaConfig.java
++++ b/src/main/java/org/subkek/etheria/EtheriaConfig.java
+@@ -145,4 +145,13 @@ public enum EtheriaConfig {
+     private void blockSettings() {
+         stonecutterDamage = (float) getDouble("blocks.stonecutter.damage", stonecutterDamage);
+     }
++
++    private boolean creeperAllowGrief = true;
++    private boolean endermanAllowGrief = true;
++    private boolean enderdragonAllowGrief = true;
++    private void griefControlSettings() {
++        creeperAllowGrief = getBoolean("entity.grief.creeper", creeperAllowGrief);
++        endermanAllowGrief = getBoolean("entity.grief.enderman", endermanAllowGrief);
++        enderdragonAllowGrief = getBoolean("entity.grief.enderdragon", enderdragonAllowGrief);
++    }
+ }
