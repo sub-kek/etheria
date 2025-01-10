@@ -76,12 +76,12 @@ allprojects {
         includeModule("com.github.technove", "Flare")
       }
     }
-    maven("https://repo.bambooland.fun/maven-public/")
+    maven("https://repo.subkek.space/maven-public/")
   }
 
   publishing {
     repositories {
-      maven("https://repo.bambooland.fun/maven-public/") {
+      maven("https://repo.subkek.space/maven-public/") {
         name = "subkek"
         credentials(PasswordCredentials::class)
       }
@@ -101,5 +101,5 @@ publishing {
 
 tasks.generateDevelopmentBundle {
   apiCoordinates.set("org.subkek.etheria:etheria-api")
-  libraryRepositories.addAll("https://repo.bambooland.fun/maven-public/")
+  libraryRepositories.addAll("https://repo.subkek.space/maven-public/")
 }

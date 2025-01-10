@@ -15,7 +15,7 @@ You can also [build it yourself](https://github.com/sub-kek/Etheria#building).
 ### gradle
 ```kotlin
 repositories {
-  maven("https://repo.bambooland.fun/maven-public/")
+  maven("https://repo.subkek.space/maven-public/")
 }
 
 dependencies {
@@ -31,7 +31,7 @@ java {
 ```xml
 <repository>
   <id>subkek</id>
-  <url>https://repo.bambooland.fun/maven-public/</url>
+  <url>https://repo.subkek.space/maven-public/</url>
 </repository>
 ```
 ```xml
