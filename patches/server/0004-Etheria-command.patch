@@ -18,7 +18,7 @@ index adaf480bfd5a168abfc3c9ba0fe401875f9a3f61..874b227b447acfc07c1fe93c8904fd30
          this.setFlightAllowed(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/org/subkek/etheria/EtheriaCommand.java b/src/main/java/org/subkek/etheria/EtheriaCommand.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..5724701077f4fe095b8bebe535879506412ce379
+index 0000000000000000000000000000000000000000..140bfe91b486af4efb3b13012b845413fffee651
 --- /dev/null
 +++ b/src/main/java/org/subkek/etheria/EtheriaCommand.java
 @@ -0,0 +1,74 @@
@@ -65,7 +65,7 @@ index 0000000000000000000000000000000000000000..5724701077f4fe095b8bebe535879506
 +    @Override
 +    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
 +        if (!testPermission(sender)) return true;
-+        String prefix = "<#ff9f63><bold> Etheria » <#ffd6ab>";
++        String prefix = "<#ff9f63><bold> Etheria » </bold><#ffd6ab>";
 +
 +        if (args.length != 1) {
 +            sender.sendMessage(MINI_MESSAGE.deserialize(prefix + "Usage: " + usageMessage));
@@ -90,7 +90,7 @@ index 0000000000000000000000000000000000000000..5724701077f4fe095b8bebe535879506
 +            sender.sendMessage(MINI_MESSAGE.deserialize(prefix + "Core: " + Bukkit.getVersion()));
 +            sender.sendMessage(MINI_MESSAGE.deserialize(prefix + "API: " + Bukkit.getBukkitVersion()));
 +        } else {
-+            sender.sendMessage(MINI_MESSAGE.deserialize(prefix + "Hmm, not found argument."));
++            sender.sendMessage(MINI_MESSAGE.deserialize(prefix + "Hmm, cannot find argument."));
 +        }
 +
 +        return true;

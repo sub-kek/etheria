@@ -143,10 +143,10 @@ index e37aaf77f94b97b736cc20ef070cefdff0400188..5695e1da36aa5a290d4daae49d244496
              } else if (source.is(DamageTypes.HOT_FLOOR)) {
                  cause = DamageCause.HOT_FLOOR;
 diff --git a/src/main/java/org/subkek/etheria/EtheriaConfig.java b/src/main/java/org/subkek/etheria/EtheriaConfig.java
-index 9a5f2036c9c9ca31dac335cd0facd4cc5b1d277b..60506e1815f55b7c2e38920d78c12e7d3d4abb9a 100644
+index ff5d7cad474abefc462270c2461a3d2a81892f5a..a0ab1d3292c8ad4698ceb57254f8b965eab3e044 100644
 --- a/src/main/java/org/subkek/etheria/EtheriaConfig.java
 +++ b/src/main/java/org/subkek/etheria/EtheriaConfig.java
-@@ -135,4 +135,14 @@ public enum EtheriaConfig {
+@@ -131,4 +131,14 @@ public enum EtheriaConfig {
      //  private void someSettings() { # Configurator methods must be ends with Settings
      //    option = getBoolean("some.option", option, "Good comment");
      //  }

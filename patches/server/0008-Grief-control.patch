@@ -50,10 +50,10 @@ index 4e4dab5bc202f6f421dcff98f0e36e8e70378b49..dccc133364801f66ecd3ee9262aa1c5d
          }
  
 diff --git a/src/main/java/org/subkek/etheria/EtheriaConfig.java b/src/main/java/org/subkek/etheria/EtheriaConfig.java
-index 60506e1815f55b7c2e38920d78c12e7d3d4abb9a..94b207c7caf07faca69bbc119c70267ee4f36b7c 100644
+index a0ab1d3292c8ad4698ceb57254f8b965eab3e044..5bb629e25bb7d99e282c1c56b2867e46a9a25d83 100644
 --- a/src/main/java/org/subkek/etheria/EtheriaConfig.java
 +++ b/src/main/java/org/subkek/etheria/EtheriaConfig.java
-@@ -145,4 +145,13 @@ public enum EtheriaConfig {
+@@ -141,4 +141,13 @@ public enum EtheriaConfig {
      private void blockSettings() {
          stonecutterDamage = (float) getDouble("blocks.stonecutter.damage", stonecutterDamage);
      }

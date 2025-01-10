@@ -34,10 +34,10 @@ index d62f7375394409a278bc565c8263506c598ceeba..adaf480bfd5a168abfc3c9ba0fe40187
          this.setFlightAllowed(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/org/subkek/etheria/EtheriaConfig.java b/src/main/java/org/subkek/etheria/EtheriaConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..9a5f2036c9c9ca31dac335cd0facd4cc5b1d277b
+index 0000000000000000000000000000000000000000..ff5d7cad474abefc462270c2461a3d2a81892f5a
 --- /dev/null
 +++ b/src/main/java/org/subkek/etheria/EtheriaConfig.java
-@@ -0,0 +1,138 @@
+@@ -0,0 +1,134 @@
 +package org.subkek.etheria;
 +
 +import lombok.AccessLevel;
@@ -65,13 +65,9 @@ index 0000000000000000000000000000000000000000..9a5f2036c9c9ca31dac335cd0facd4cc
 +    private final File configFile;
 +    private String configVersion;
 +
-+    public void init() {
++    public void init() throws IOException {
 +        if (configFile.exists()) {
-+            try {
-+                yaml.load(configFile);
-+            } catch (IOException e) {
-+                EtheriaLogger.error("Error loading file: ", e);
-+            }
++            yaml.load(configFile);
 +        }
 +
 +        configVersion = getString("info.version", "1.0", "Don't change this value");
